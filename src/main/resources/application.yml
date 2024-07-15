@@ -29,3 +29,16 @@ pagehelper:
   params: count=countSql
 
 ip: localhost
+
+# 接口文档配置
+knife4j:
+  enable: true
+  openapi:
+    title: "二手交易平台-接口文档"
+    description: "接口文档"
+    version: 1.0
+    group:
+      default:
+        api-rule: package
+        api-rule-resources:
+          - com.example.controller
