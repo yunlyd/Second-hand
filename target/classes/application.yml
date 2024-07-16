@@ -1,11 +1,8 @@
 server:
-  port: 9090
+  port: 3456
 
 # 数据库配置
 spring:
-#  mvc:
-#    pathmatch:
-#      matching-strategy: ant_path_matcher
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
