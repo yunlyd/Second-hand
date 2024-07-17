@@ -2,4 +2,4 @@ db:
   host: mysql
   password: yunyd.123456
 
-ip:
+ip: 101.43.244.154

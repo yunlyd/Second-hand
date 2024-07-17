@@ -1,6 +1,8 @@
 package com.example.service.impl;
 
+import com.example.entity.Account;
 import com.example.service.UserService;
+import com.example.utils.TokenUtils;
 import org.springframework.stereotype.Service;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.ResultCodeEnum;
@@ -25,8 +27,39 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
 
     /**
+     * 登录
+     */
+    @Override
+    public Account login(Account account) {
+        Account dbUser = userMapper.selectByUsername(account.getUsername());
+        if (ObjectUtil.isNull(dbUser)) {
+            throw new CustomException(ResultCodeEnum.USER_NOT_EXIST_ERROR);
+        }
+        if (!account.getPassword().equals(dbUser.getPassword())) {
+            throw new CustomException(ResultCodeEnum.USER_ACCOUNT_ERROR);
+        }
+        // 生成token
+        String tokenData = dbUser.getId() + "-" + RoleEnum.USER.name();  // 注意这里
+        String token = TokenUtils.createToken(tokenData, dbUser.getPassword());
+        dbUser.setToken(token);
+        return dbUser;
+    }
+
+    /**
+     * 注册
+     */
+    @Override
+    public void register(Account account) {
+        User user = new User();
+        user.setUsername(account.getUsername());
+        user.setPassword(account.getPassword());
+        this.add(user);
+    }
+
+    /**
      * 新增
      */
+    @Override
     public void add(User user) {
         //  1. 校验你的用户名是否重复
         User dbUser = userMapper.selectByUsername(user.getUsername());
@@ -48,6 +81,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 删除
      */
+    @Override
     public void deleteById(Integer id) {
         userMapper.deleteById(id);
     }
@@ -55,6 +89,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 批量删除
      */
+    @Override
     public void deleteBatch(List<Integer> ids) {
         for (Integer id : ids) {
             userMapper.deleteById(id);
@@ -64,6 +99,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 修改
      */
+    @Override
     public void updateById(User user) {
         userMapper.updateById(user);
     }
@@ -71,6 +107,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 根据ID查询
      */
+    @Override
     public User selectById(Integer id) {
         return userMapper.selectById(id);
     }
@@ -78,6 +115,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 查询所有
      */
+    @Override
     public List<User> selectAll(User user) {
         return userMapper.selectAll(user);
     }
@@ -85,6 +123,7 @@ public class UserServiceImpl implements UserService{
     /**
      * 分页查询
      */
+    @Override
     public PageInfo<User> selectPage(User user, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<User> list = userMapper.selectAll(user);

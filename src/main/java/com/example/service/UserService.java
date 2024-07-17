@@ -1,6 +1,7 @@
 package com.example.service;
 
 
+import com.example.entity.Account;
 import com.example.entity.User;
 import com.github.pagehelper.PageInfo;
 
@@ -11,6 +12,16 @@ import java.util.List;
  * @date 2024/7/15
  */
 public interface UserService  {
+
+    /**
+     * 登录
+     */
+    Account login(Account account);
+
+    /**
+     * 注册
+     */
+    void register(Account account);
 
     /**
      * 新增
