@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.common.Constants;
 import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * jwt拦截器
@@ -67,9 +69,9 @@ public class JwtInterceptor implements HandlerInterceptor {
         try {
             // 用户密码加签验证 token
             JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(account.getPassword())).build();
-            jwtVerifier.verify(token); // 验证token
+            DecodedJWT verify = jwtVerifier.verify(token);// 验证token 签名认证 时间有效性
         } catch (JWTVerificationException e) {
-            throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
+            throw new CustomException(ResultCodeEnum.TOKEN_EXPIRED_ERROR);
         }
         return true;
     }

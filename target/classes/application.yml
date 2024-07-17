@@ -14,6 +14,12 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  redis:
+    database: 0
+    host: 101.43.244.154
+    port: 6379
+    timeout: 5000
+    password: liu111
 
 # 配置mybatis实体和xml映射
 mybatis:

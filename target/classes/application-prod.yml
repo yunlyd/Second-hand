@@ -3,3 +3,6 @@ db:
   password: yunyd.123456
 
 ip: 101.43.244.154
+
+redis:
+  password: liu111
