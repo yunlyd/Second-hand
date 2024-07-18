@@ -15,6 +15,7 @@ import com.example.service.AdminService;
 import com.example.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * jwt拦截器
@@ -35,6 +37,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     private AdminService adminService;
     @Resource
     private UserService userService;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -69,10 +73,25 @@ public class JwtInterceptor implements HandlerInterceptor {
         try {
             // 用户密码加签验证 token
             JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(account.getPassword())).build();
-            DecodedJWT verify = jwtVerifier.verify(token);// 验证token 签名认证 时间有效性
+            jwtVerifier.verify(token);// 验证token
         } catch (JWTVerificationException e) {
+            throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
+        }
+        String redisToken = (String)redisTemplate.opsForValue().get(Constants.REDIS_TOKEN_ADMIN + account.getId());
+        if (redisToken == null || !redisToken.equals(token)){
+            throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
+        }
+        Long expire = redisTemplate.getExpire(Constants.REDIS_TOKEN_ADMIN + account.getId(), TimeUnit.MINUTES);
+        if (expire != null && expire == -2) {
+            // 键已过期  如果 expire为1 则没设置有效期
             throw new CustomException(ResultCodeEnum.TOKEN_EXPIRED_ERROR);
         }
+        // 距离还剩过期时间的百分之二十
+        if (expire <= 0.8 * Constants.EXPIRED_TIME){
+            // 键还未过期，重新设置过期时间 -> 续签
+            redisTemplate.opsForValue().set(Constants.REDIS_TOKEN_ADMIN + account.getId(),token,Constants.EXPIRED_TIME, TimeUnit.MINUTES);
+        }
+
         return true;
     }
 }

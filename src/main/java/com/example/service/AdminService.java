@@ -12,10 +12,12 @@ import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 管理员业务处理
@@ -25,6 +27,8 @@ public class AdminService {
 
     @Resource
     private AdminMapper adminMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     /**
      * 新增
@@ -104,6 +108,7 @@ public class AdminService {
         // 生成token
         String tokenData = dbAdmin.getId() + "-" + RoleEnum.ADMIN.name();
         String token = TokenUtils.createToken(tokenData, dbAdmin.getPassword());
+        redisTemplate.opsForValue().set(Constants.REDIS_TOKEN_ADMIN + dbAdmin.getId(),token,Constants.EXPIRED_TIME, TimeUnit.MINUTES);
         dbAdmin.setToken(token);
         return dbAdmin;
     }

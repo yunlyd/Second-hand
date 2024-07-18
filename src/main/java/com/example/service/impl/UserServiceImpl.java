@@ -1,8 +1,10 @@
 package com.example.service.impl;
 
+import com.example.common.Constants;
 import com.example.entity.Account;
 import com.example.service.UserService;
 import com.example.utils.TokenUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.ResultCodeEnum;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @lyd
@@ -25,6 +28,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
     /**
      * 登录
@@ -41,6 +47,7 @@ public class UserServiceImpl implements UserService{
         // 生成token
         String tokenData = dbUser.getId() + "-" + RoleEnum.USER.name();  // 注意这里
         String token = TokenUtils.createToken(tokenData, dbUser.getPassword());
+        redisTemplate.opsForValue().set(Constants.REDIS_TOKEN_USER + dbUser.getId(),token,Constants.EXPIRED_TIME, TimeUnit.MINUTES);
         dbUser.setToken(token);
         return dbUser;
     }
