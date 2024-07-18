@@ -87,7 +87,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             throw new CustomException(ResultCodeEnum.TOKEN_EXPIRED_ERROR);
         }
         // 距离还剩过期时间的百分之二十
-        if (expire <= 0.8 * Constants.EXPIRED_TIME){
+        if (expire <= Constants.THRESHOLD * Constants.EXPIRED_TIME){
             // 键还未过期，重新设置过期时间 -> 续签
             redisTemplate.opsForValue().set(Constants.REDIS_TOKEN_ADMIN + account.getId(),token,Constants.EXPIRED_TIME, TimeUnit.MINUTES);
         }

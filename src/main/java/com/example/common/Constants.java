@@ -10,6 +10,10 @@ public interface Constants {
 
     String REDIS_TOKEN_ADMIN = "token:admin:";
 
+    //过期时间阈值
+    double THRESHOLD = 0.2;
+
+    //过期时间 30min
     int EXPIRED_TIME = 30;
 
 }
