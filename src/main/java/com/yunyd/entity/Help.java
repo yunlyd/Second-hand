@@ -1,14 +1,15 @@
 package com.yunyd.entity;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @lyd
  * @date 2024/7/22
  */
 @Data
-public class Posts implements Serializable {
+public class Help implements Serializable {
     /**
      * ID
      */
@@ -30,6 +31,11 @@ public class Posts implements Serializable {
     private String img;
 
     /**
+     * 状态
+     */
+    private String status;
+
+    /**
      * 用户ID
      */
     private Integer userId;
@@ -40,25 +46,14 @@ public class Posts implements Serializable {
     private String time;
 
     /**
-     * 圈子
+     * 是否解决
      */
-    private String circle;
+    private String solved;
 
     /**
-     * 简介
+     * 用户名
      */
-    private String descr;
-
-    /**
-     * 浏览量
-     */
-    private Integer readCount;
-
-    /**
-     * 审核状态
-     */
-    private String status;
+    private String userName;
 
     private static final long serialVersionUID = 1L;
-
 }
