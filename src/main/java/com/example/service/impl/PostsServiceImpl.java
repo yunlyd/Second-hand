@@ -1,8 +1,11 @@
 package com.example.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import com.example.entity.Account;
 import com.example.entity.Posts;
 import com.example.mapper.PostsMapper;
 import com.example.service.PostsService;
+import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,10 @@ public class PostsServiceImpl implements PostsService{
      * 新增
      */
     public void add(Posts posts) {
+        posts.setTime(DateUtil.now());
+        Account currentUser = TokenUtils.getCurrentUser();
+        posts.setUserId(currentUser.getId());
+        posts.setStatus("待审核");
         postsMapper.insert(posts);
     }
 

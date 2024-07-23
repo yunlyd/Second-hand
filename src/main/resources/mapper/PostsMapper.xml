@@ -14,30 +14,25 @@
             <result property="circle" column="circle" jdbcType="VARCHAR"/>
             <result property="descr" column="descr" jdbcType="VARCHAR"/>
             <result property="readCount" column="read_count" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,title,content,
         img,user_id,time,
-        circle,descr,read_count
+        circle,descr,read_count,status
     </sql>
 
     <select id="selectAll" resultType="com.example.entity.Posts">
         select
-        <include refid="Base_Column_List" />
+        posts.*, user.name as userName
         from posts
+        left join user on posts.user_id = user.id
         <where>
-            <if test="id != null"> and id = #{id}</if>
             <if test="title != null"> and title like concat('%', #{title}, '%')</if>
-            <if test="content != null"> and content like concat('%', #{content}, '%')</if>
-            <if test="img != null"> and img like concat('%', #{img}, '%')</if>
             <if test="userId != null"> and user_id = #{userId}</if>
-            <if test="time != null"> and time like concat('%', #{time}, '%')</if>
-            <if test="circle != null"> and circle like concat('%', #{circle}, '%')</if>
-            <if test="descr != null"> and descr like concat('%', #{descr}, '%')</if>
-            <if test="readCount != null"> and read_count = #{readCount}</if>
         </where>
-        order by id desc
+        order by posts.id desc
     </select>
 
     <select id="selectById" resultType="com.example.entity.Posts">
@@ -64,6 +59,7 @@
             <if test="circle != null">circle,</if>
             <if test="descr != null">descr,</if>
             <if test="readCount != null">read_count,</if>
+            <if test="status != null">status,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -75,6 +71,7 @@
             <if test="circle != null">#{circle},</if>
             <if test="descr != null">#{descr},</if>
             <if test="readCount != null">#{readCount},</if>
+            <if test="status != null">#{status},</if>
         </trim>
     </insert>
 
@@ -104,6 +101,9 @@
             </if>
             <if test="readCount != null">
                 read_count = #{readCount},
+            </if>
+            <if test="status != null">
+                status = #{status},
             </if>
         </set>
         where id = #{id}

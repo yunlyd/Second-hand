@@ -54,6 +54,11 @@ public class Posts implements Serializable {
      */
     private Integer readCount;
 
+    /**
+     * 审核状态
+     */
+    private String status;
+
     private static final long serialVersionUID = 1L;
 
     @Override
