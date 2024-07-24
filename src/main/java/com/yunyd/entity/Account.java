@@ -4,6 +4,8 @@ import lombok.Data;
 
 /**
  * 角色用户父类
+ * @lyd
+ * @date 2024/7/12
  */
 @Data
 public class Account {
