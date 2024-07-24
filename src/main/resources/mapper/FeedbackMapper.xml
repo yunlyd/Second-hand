@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunyd.mapper.FeedbackMapper">
+
+    <resultMap id="BaseResultMap" type="com.yunyd.entity.Feedback">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="reply" column="reply" jdbcType="VARCHAR"/>
+            <result property="createtime" column="createtime" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,content,
+        phone,email,reply,
+        createtime,user_id
+    </sql>
+
+    <select id="selectAll" resultType="com.yunyd.entity.Feedback">
+        select
+        feedback.*, user.name as userName
+        from feedback
+        left join user on feedback.user_id = user.id
+        <where>
+            <if test="title != null"> and feedback.title like concat('%', #{title}, '%')</if>
+            <if test="userId != null"> and feedback.user_id = #{userId}</if>
+        </where>
+        order by feedback.id desc
+    </select>
+
+    <select id="selectById" resultType="com.yunyd.entity.Feedback">
+        select
+        <include refid="Base_Column_List" />
+        from feedback
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from feedback
+        where  id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.yunyd.entity.Feedback" useGeneratedKeys="true" keyProperty="id">
+        insert into feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="reply != null">reply,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="userId != null">user_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="reply != null">#{reply},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="userId != null">#{userId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.yunyd.entity.Feedback">
+        update feedback
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="reply != null">
+                reply = #{reply},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
