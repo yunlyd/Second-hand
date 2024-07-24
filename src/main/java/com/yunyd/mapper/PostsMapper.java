@@ -5,6 +5,7 @@ import com.yunyd.entity.Posts;
 import java.util.List;
 
 /**
+ * 操作posts相关数据接口
  * @lyd
  * @date 2024/7/23
 */

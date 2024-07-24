@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 /**
  * 管理员
+ * @lyd
+ * @date 2024/7/12
 */
 @Data
 public class Admin extends Account implements Serializable {

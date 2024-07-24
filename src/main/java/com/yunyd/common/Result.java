@@ -2,6 +2,11 @@ package com.yunyd.common;
 
 import com.yunyd.common.enums.ResultCodeEnum;
 
+/**
+ * 通用返回类
+ * @lyd
+ * @date 2024/7/12
+ */
 public class Result {
     private String code;
     private String msg;

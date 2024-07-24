@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 全局异常处理器
+ * @lyd
+ * @date 2024/7/12
+ */
 @ControllerAdvice(basePackages="com.example.controller")
 public class GlobalExceptionHandler {
 

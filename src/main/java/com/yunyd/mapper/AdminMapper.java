@@ -7,7 +7,9 @@ import java.util.List;
 
 /**
  * 操作admin相关数据接口
-*/
+ * @lyd
+ * @date 2024/7/12
+ */
 public interface AdminMapper {
 
     /**

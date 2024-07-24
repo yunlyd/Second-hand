@@ -5,6 +5,7 @@ import com.yunyd.entity.Goods;
 import java.util.List;
 
 /**
+ * 操作goods相关数据接口
  * @lyd
  * @date 2024/7/22
 */

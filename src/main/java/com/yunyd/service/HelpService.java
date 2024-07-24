@@ -6,6 +6,7 @@ import com.yunyd.entity.Help;
 import java.util.List;
 
 /**
+ * 商品求购业务处理
  * @lyd
  * @date 2024/7/22
 */

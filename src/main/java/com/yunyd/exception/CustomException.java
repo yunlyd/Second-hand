@@ -2,6 +2,11 @@ package com.yunyd.exception;
 
 import com.yunyd.common.enums.ResultCodeEnum;
 
+/**
+ * 自定义异常
+ * @lyd
+ * @date 2024/7/12
+ */
 public class CustomException extends RuntimeException {
     private String code;
     private String msg;

@@ -5,6 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
+ * 商品求购
  * @lyd
  * @date 2024/7/22
  */

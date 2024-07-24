@@ -9,6 +9,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 /**
  * 自定义序列化
+ * @lyd
+ * @date 2024/7/17
  */
 @Configuration
 public class RedisConfig {

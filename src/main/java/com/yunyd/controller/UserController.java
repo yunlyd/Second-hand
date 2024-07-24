@@ -10,8 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @lyd
- * @date 2024/7/15
+ * 用户前端操作接口
  */
 @RestController
 @RequestMapping("/user")

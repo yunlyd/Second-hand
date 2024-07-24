@@ -1,5 +1,10 @@
 package com.yunyd.common;
 
+/**
+ * 常量类
+ * @lyd
+ * @date 2024/7/12
+ */
 public interface Constants {
 
     String TOKEN = "token";

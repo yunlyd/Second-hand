@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
+ * 二手商品
  * @lyd
  * @date 2024/7/22
  */

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
+ * 分类
  * @lyd
  * @date 2024/7/18
  */

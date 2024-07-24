@@ -1,5 +1,10 @@
 package com.yunyd.common.enums;
 
+/**
+ * 枚举
+ * @lyd
+ * @date 2024/7/12
+ */
 public enum ResultCodeEnum {
     SUCCESS("200", "成功"),
 

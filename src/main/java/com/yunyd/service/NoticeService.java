@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * 公告信息表业务处理
+ * @lyd
+ * @date 2024/7/12
  **/
 @Service
 public class NoticeService {

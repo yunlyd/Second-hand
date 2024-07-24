@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 /**
  * 公告信息表
+ * @lyd
+ * @date 2024/7/12
 */
 @Data
 public class Notice implements Serializable {

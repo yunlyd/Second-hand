@@ -6,6 +6,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
 
+/**
+ * 全局拦截器
+ * @lyd
+ * @date 2024/7/12
+ */
 @Configuration
 public class WebConfig implements  WebMvcConfigurer {
 

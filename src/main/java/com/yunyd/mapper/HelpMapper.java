@@ -5,6 +5,7 @@ import com.yunyd.entity.Help;
 import java.util.List;
 
 /**
+ * 操作help相关数据接口
  * @lyd
  * @date 2024/7/22
 */

@@ -5,6 +5,7 @@ import com.yunyd.entity.Category;
 import java.util.List;
 
 /**
+ * 操作category相关数据接口
  * @lyd
  * @date 2024/7/18
  */

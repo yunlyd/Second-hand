@@ -8,6 +8,8 @@ import org.springframework.web.filter.CorsFilter;
 
 /**
  * 跨域配置
+ * @lyd
+ * @date 2024/7/12
  */
 @Configuration
 public class CorsConfig {

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
+ * 操作user相关数据接口
  * @lyd
  * @date 2024/7/15
  */
