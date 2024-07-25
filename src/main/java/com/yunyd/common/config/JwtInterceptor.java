@@ -53,31 +53,27 @@ public class JwtInterceptor implements HandlerInterceptor {
             throw new CustomException(ResultCodeEnum.TOKEN_INVALID_ERROR);
         }
         Account account = null;
-        try {
-            // 解析token获取存储的数据
-            String userRole = JWT.decode(token).getAudience().get(0);
-            String userId = userRole.split("-")[0];
-            String role = userRole.split("-")[1];
-            // 根据userId查询数据库,如果用户角色是admin，则查询redis中admin对应的 token
-            if (RoleEnum.ADMIN.name().equals(role)) {
-                account = adminService.selectById(Integer.valueOf(userId));
-                String redisAdminToken = (String)redisTemplate.opsForValue().get(Constants.REDIS_TOKEN_ADMIN + account.getId());
-                if (redisAdminToken == null || !redisAdminToken.equals(token)){
-                    throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
-                }
-                //判断redis中的key是否过期，并根据条件 对token续期
-                renewal(Constants.REDIS_TOKEN_ADMIN, account.getId(), token);
-            }else if (RoleEnum.USER.name().equals(role)){  //如果用户角色是user，则查询redis中user对应的 token
-                account = userService.selectById(Integer.valueOf(userId));
-                String redisUserToken = (String)redisTemplate.opsForValue().get(Constants.REDIS_TOKEN_USER + account.getId());
-                if (redisUserToken == null || !redisUserToken.equals(token)){
-                    throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
-                }
-                //判断redis中的key是否过期，并根据条件 对token续期
-                renewal(Constants.REDIS_TOKEN_USER, account.getId(), token);
+        // 解析token获取存储的数据
+        String userRole = JWT.decode(token).getAudience().get(0);
+        String userId = userRole.split("-")[0];
+        String role = userRole.split("-")[1];
+        // 根据userId查询数据库,如果用户角色是admin，则查询redis中admin对应的 token
+        if (RoleEnum.ADMIN.name().equals(role)) {
+            account = adminService.selectById(Integer.valueOf(userId));
+            String redisAdminToken = (String)redisTemplate.opsForValue().get(Constants.REDIS_TOKEN_ADMIN + account.getId());
+            if (redisAdminToken == null || !redisAdminToken.equals(token)){
+                throw new CustomException(ResultCodeEnum.TOKEN_EXPIRED_ERROR);
             }
-        } catch (Exception e) {
-            throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
+            //判断redis中的key是否过期，并根据条件 对token续期
+            renewal(Constants.REDIS_TOKEN_ADMIN, account.getId(), token);
+        }else if (RoleEnum.USER.name().equals(role)){  //如果用户角色是user，则查询redis中user对应的 token
+            account = userService.selectById(Integer.valueOf(userId));
+            String redisUserToken = (String)redisTemplate.opsForValue().get(Constants.REDIS_TOKEN_USER + account.getId());
+            if (redisUserToken == null || !redisUserToken.equals(token)){
+                throw new CustomException(ResultCodeEnum.TOKEN_EXPIRED_ERROR);
+            }
+            //判断redis中的key是否过期，并根据条件 对token续期
+            renewal(Constants.REDIS_TOKEN_USER, account.getId(), token);
         }
         if (ObjectUtil.isNull(account)) {
             throw new CustomException(ResultCodeEnum.USER_NOT_EXIST_ERROR);
