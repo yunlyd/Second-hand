@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * @lyd
  * @date 2024/7/12
  */
-@ControllerAdvice(basePackages="com.example.controller")
+@ControllerAdvice(basePackages="com.yunyd.controller")
 public class GlobalExceptionHandler {
 
     private static final Log log = LogFactory.get();
