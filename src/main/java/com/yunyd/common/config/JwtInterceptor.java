@@ -58,11 +58,23 @@ public class JwtInterceptor implements HandlerInterceptor {
             String userRole = JWT.decode(token).getAudience().get(0);
             String userId = userRole.split("-")[0];
             String role = userRole.split("-")[1];
-            // 根据userId查询数据库
+            // 根据userId查询数据库,如果用户角色是admin，则查询redis中admin对应的 token
             if (RoleEnum.ADMIN.name().equals(role)) {
                 account = adminService.selectById(Integer.valueOf(userId));
-            }else if (RoleEnum.USER.name().equals(role)){
+                String redisAdminToken = (String)redisTemplate.opsForValue().get(Constants.REDIS_TOKEN_ADMIN + account.getId());
+                if (redisAdminToken == null || !redisAdminToken.equals(token)){
+                    throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
+                }
+                //判断redis中的key是否过期，并根据条件 对token续期
+                renewal(Constants.REDIS_TOKEN_ADMIN, account.getId(), token);
+            }else if (RoleEnum.USER.name().equals(role)){  //如果用户角色是user，则查询redis中user对应的 token
                 account = userService.selectById(Integer.valueOf(userId));
+                String redisUserToken = (String)redisTemplate.opsForValue().get(Constants.REDIS_TOKEN_USER + account.getId());
+                if (redisUserToken == null || !redisUserToken.equals(token)){
+                    throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
+                }
+                //判断redis中的key是否过期，并根据条件 对token续期
+                renewal(Constants.REDIS_TOKEN_USER, account.getId(), token);
             }
         } catch (Exception e) {
             throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
@@ -77,11 +89,12 @@ public class JwtInterceptor implements HandlerInterceptor {
         } catch (JWTVerificationException e) {
             throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
         }
-        String redisToken = (String)redisTemplate.opsForValue().get(Constants.REDIS_TOKEN_ADMIN + account.getId());
-        if (redisToken == null || !redisToken.equals(token)){
-            throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);
-        }
-        Long expire = redisTemplate.getExpire(Constants.REDIS_TOKEN_ADMIN + account.getId(), TimeUnit.MINUTES);
+        return true;
+    }
+
+    // redis中token 续期
+    public void renewal(String key, Integer id, String token){
+        Long expire = redisTemplate.getExpire(key + id, TimeUnit.MINUTES);
         if (expire != null && expire == -2) {
             // 键已过期  如果 expire为1 则没设置有效期
             throw new CustomException(ResultCodeEnum.TOKEN_EXPIRED_ERROR);
@@ -89,9 +102,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         // 距离还剩过期时间的百分之二十
         if (expire <= Constants.THRESHOLD * Constants.EXPIRED_TIME){
             // 键还未过期，重新设置过期时间 -> 续签
-            redisTemplate.opsForValue().set(Constants.REDIS_TOKEN_ADMIN + account.getId(),token,Constants.EXPIRED_TIME, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(key + id, token, Constants.EXPIRED_TIME, TimeUnit.MINUTES);
         }
-
-        return true;
     }
 }
