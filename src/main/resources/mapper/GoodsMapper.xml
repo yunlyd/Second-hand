@@ -39,6 +39,21 @@
         order by id desc
     </select>
 
+    <select id="selectFrontAll" resultType="com.yunyd.entity.Goods">
+        select
+        goods.*, user.name as userName
+        from goods
+        left join user on goods.user_id = user.id
+        <where>
+            goods.status = '通过' and goods.sale_status = '上架'
+            <if test="name != null"> and goods.name like concat('%', #{name}, '%')</if>
+            <if test="category != null"> and goods.category = #{category}</if>
+            <if test="userId != null"> and goods.user_id = #{userId}</if>
+        </where>
+        <if test="sort == '最新'"> order by goods.id desc</if>
+        <if test="sort == '最热'"> order by goods.read_count desc</if>
+    </select>
+
     <select id="selectById" resultType="com.yunyd.entity.Goods">
         select
         <include refid="Base_Column_List" />

@@ -43,7 +43,13 @@ public interface GoodsService {
     List<Goods> selectAll(Goods goods);
 
     /**
-     * 分页查询
+     * 后台分页查询
      */
     PageInfo<Goods> selectPage(Goods goods, Integer pageNum, Integer pageSize);
+
+    /**
+     * 前台分页查询
+     */
+    PageInfo<Goods> selectFrontPage(Goods goods, Integer pageNum, Integer pageSize);
+
 }

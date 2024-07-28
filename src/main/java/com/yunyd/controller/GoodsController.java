@@ -83,4 +83,15 @@ public class GoodsController {
         return Result.success(page);
     }
 
+    /**
+     * 前台分页查询
+     */
+    @GetMapping("/selectFrontPage")
+    public Result selectFrontPage(Goods goods,
+                                  @RequestParam(defaultValue = "1") Integer pageNum,
+                                  @RequestParam(defaultValue = "10") Integer pageSize) {
+        PageInfo<Goods> page = goodsService.selectFrontPage(goods, pageNum, pageSize);
+        return Result.success(page);
+    }
+
 }

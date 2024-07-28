@@ -35,6 +35,11 @@ public interface GoodsMapper {
      * 查询所有
      */
     List<Goods> selectAll(Goods goods);
+
+    /**
+     * 前台分页查询
+     */
+    List<Goods> selectFrontAll(Goods goods);
 }
 
 

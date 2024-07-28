@@ -77,6 +77,11 @@ public class Goods implements Serializable {
      */
     private Integer readCount;
 
+    /**
+     * 最新 or 最热
+     */
+    private String sort;
+
     private static final long serialVersionUID = 1L;
 
 }

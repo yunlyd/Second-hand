@@ -71,7 +71,7 @@ public class GoodsServiceImpl implements GoodsService{
     }
 
     /**
-     * 分页查询
+     * 后台分页查询
      */
     @Override
     public PageInfo<Goods> selectPage(Goods goods, Integer pageNum, Integer pageSize) {
@@ -80,6 +80,15 @@ public class GoodsServiceImpl implements GoodsService{
         return PageInfo.of(list);
     }
 
+    /**
+     * 前台分页查询
+     */
+    @Override
+    public PageInfo<Goods> selectFrontPage(Goods goods, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Goods> list = goodsMapper.selectFrontAll(goods);
+        return PageInfo.of(list);
+    }
 }
 
 
