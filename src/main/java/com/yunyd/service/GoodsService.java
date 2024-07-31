@@ -52,4 +52,9 @@ public interface GoodsService {
      */
     PageInfo<Goods> selectFrontPage(Goods goods, Integer pageNum, Integer pageSize);
 
+    /**
+     * 浏览量 +1
+     */
+    void updateReadCount(Integer id);
+
 }

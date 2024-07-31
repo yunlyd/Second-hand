@@ -94,4 +94,13 @@ public class GoodsController {
         return Result.success(page);
     }
 
+    /**
+     * 浏览量 +1
+     */
+    @PutMapping("/updateReadCount/{id}")
+    public Result updateReadCount(@PathVariable Integer id) {
+        goodsService.updateReadCount(id);
+        return Result.success();
+    }
+
 }

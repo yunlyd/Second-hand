@@ -114,6 +114,14 @@ public class GoodsServiceImpl implements GoodsService{
         List<Goods> list = goodsMapper.selectFrontAll(goods);
         return PageInfo.of(list);
     }
+
+    /**
+     * 浏览量 +1
+     */
+    @Override
+    public void updateReadCount(Integer id) {
+        goodsMapper.updateReadCount(id);
+    }
 }
 
 

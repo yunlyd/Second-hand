@@ -1,6 +1,7 @@
 package com.yunyd.mapper;
 
 import com.yunyd.entity.Goods;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -40,6 +41,12 @@ public interface GoodsMapper {
      * 前台分页查询
      */
     List<Goods> selectFrontAll(Goods goods);
+
+    /**
+     * 浏览量 +1
+     */
+    @Update("update goods set read_count = read_count + 1 where id = #{id}")
+    void updateReadCount(Integer id);
 }
 
 
