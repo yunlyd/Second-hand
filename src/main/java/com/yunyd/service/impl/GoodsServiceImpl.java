@@ -1,10 +1,16 @@
 package com.yunyd.service.impl;
 
+import com.yunyd.entity.Account;
+import com.yunyd.entity.Collect;
 import com.yunyd.entity.Goods;
+import com.yunyd.entity.Likes;
+import com.yunyd.mapper.CollectMapper;
 import com.yunyd.mapper.GoodsMapper;
+import com.yunyd.mapper.LikesMapper;
 import com.yunyd.service.GoodsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yunyd.utils.TokenUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,6 +25,10 @@ public class GoodsServiceImpl implements GoodsService{
 
     @Resource
     private GoodsMapper goodsMapper;
+    @Resource
+    private LikesMapper likesMapper;
+    @Resource
+    private CollectMapper collectMapper;
 
     /**
      * 新增
@@ -59,7 +69,22 @@ public class GoodsServiceImpl implements GoodsService{
      */
     @Override
     public Goods selectById(Integer id) {
-        return goodsMapper.selectById(id);
+        Goods goods = goodsMapper.selectById(id);
+
+        //查当前用户信息
+        Account currentUser = TokenUtils.getCurrentUser();
+        //查找对应点赞信息
+        Likes likes = likesMapper.selectByUserIdAndFid(currentUser.getId(), id);
+        goods.setUserLikes(likes != null);
+        int likesCount = likesMapper.selectCountByFid(id);
+        goods.setLikesCount(likesCount);
+        //查找对应收藏信息
+        Collect collect = collectMapper.selectByUserIdAndFid(currentUser.getId(), id);
+        goods.setUserCollect(collect != null);
+        int collectCount = collectMapper.selectCountByFid(id);
+        goods.setCollectCount(collectCount);
+
+        return goods;
     }
 
     /**

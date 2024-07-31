@@ -82,6 +82,26 @@ public class Goods implements Serializable {
      */
     private String sort;
 
+    /**
+     * 用户是否点赞
+     */
+    private Boolean userLikes;
+
+    /**
+     * 用户是否收藏
+     */
+    private Boolean userCollect;
+
+    /**
+     * 点赞数
+     */
+    private Integer likesCount;
+
+    /**
+     * 收藏数
+     */
+    private Integer collectCount;
+
     private static final long serialVersionUID = 1L;
 
 }
