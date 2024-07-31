@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * 操作collect相关数据接口
  * @lyd
@@ -24,6 +26,12 @@ public interface CollectMapper {
 
     @Select("select count(*) from collect where fid = #{fid}")
     int selectCountByFid(Integer fid);
+
+    @Select("select collect.*, goods.name as goodsName, goods.img as goodsImg from collect " +
+            "left join goods on collect.fid = goods.id " +
+            "where collect.user_id = #{userId} " +
+            "order by collect.id desc")
+    List<Collect> selectAll(Integer userId);
 }
 
 

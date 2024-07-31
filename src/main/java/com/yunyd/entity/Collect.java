@@ -30,5 +30,15 @@ public class Collect implements Serializable {
      */
     private String module;
 
+    /**
+     * 商品名称
+     */
+    private String goodsName;
+
+    /**
+     * 商品图片
+     */
+    private String goodsImg;
+
     private static final long serialVersionUID = 1L;
 }

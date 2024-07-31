@@ -1,13 +1,17 @@
 package com.yunyd.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yunyd.entity.Account;
 import com.yunyd.entity.Collect;
+import com.yunyd.entity.Goods;
 import com.yunyd.mapper.CollectMapper;
 import com.yunyd.service.CollectService;
 import com.yunyd.utils.TokenUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @lyd
@@ -35,6 +39,30 @@ public class CollectServiceImpl implements CollectService{
             collectMapper.insert(collect);
         }
     }
+
+    /**
+     * 分页查询
+     */
+    @Override
+    public PageInfo<Collect> selectPage(Integer pageNum, Integer pageSize) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        PageHelper.startPage(pageNum, pageSize);
+        List<Collect> list = collectMapper.selectAll(currentUser.getId());
+        return PageInfo.of(list);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        collectMapper.deleteById(id);
+    }
+
+    @Override
+    public void deleteBatch(List<Integer> ids) {
+        for (Integer id : ids) {
+            collectMapper.deleteById(id);
+        }
+    }
+
 }
 
 
