@@ -2,6 +2,7 @@ package com.yunyd.service.impl;
 
 import com.yunyd.common.Constants;
 import com.yunyd.entity.Account;
+import com.yunyd.entity.Admin;
 import com.yunyd.service.UserService;
 import com.yunyd.utils.TokenUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -134,6 +135,22 @@ public class UserServiceImpl implements UserService{
         PageHelper.startPage(pageNum, pageSize);
         List<User> list = userMapper.selectAll(user);
         return PageInfo.of(list);
+    }
+
+    /**
+     * 修改密码
+     */
+    @Override
+    public void updatePassword(Account account) {
+        User user = userMapper.selectByUsername(account.getUsername());
+        if (ObjectUtil.isNull(user)) {
+            throw new CustomException(ResultCodeEnum.USER_NOT_EXIST_ERROR);
+        }
+        if (!account.getPassword().equals(user.getPassword())) {
+            throw new CustomException(ResultCodeEnum.PARAM_PASSWORD_ERROR);
+        }
+        user.setPassword(account.getNewPassword());
+        userMapper.updateById(user);
     }
 }
 

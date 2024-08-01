@@ -1,9 +1,14 @@
 package com.yunyd.service;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import com.yunyd.common.enums.ResultCodeEnum;
 import com.yunyd.entity.Account;
+import com.yunyd.entity.Admin;
 import com.yunyd.entity.User;
 import com.github.pagehelper.PageInfo;
+import com.yunyd.exception.CustomException;
+import com.yunyd.mapper.UserMapper;
 
 import java.util.List;
 
@@ -58,4 +63,9 @@ public interface UserService  {
      * 分页查询
      */
     PageInfo<User> selectPage(User user, Integer pageNum, Integer pageSize);
+
+    /**
+     * 修改密码
+     */
+    void updatePassword(Account account);
 }
