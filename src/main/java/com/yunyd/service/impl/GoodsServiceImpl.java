@@ -1,6 +1,7 @@
 package com.yunyd.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import com.yunyd.common.enums.RoleEnum;
 import com.yunyd.common.enums.StatusEnum;
 import com.yunyd.entity.Account;
 import com.yunyd.entity.Collect;
@@ -9,6 +10,7 @@ import com.yunyd.entity.Likes;
 import com.yunyd.mapper.CollectMapper;
 import com.yunyd.mapper.GoodsMapper;
 import com.yunyd.mapper.LikesMapper;
+import com.yunyd.mapper.UserMapper;
 import com.yunyd.service.GoodsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -31,6 +33,8 @@ public class GoodsServiceImpl implements GoodsService{
     private LikesMapper likesMapper;
     @Resource
     private CollectMapper collectMapper;
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 新增
@@ -67,6 +71,10 @@ public class GoodsServiceImpl implements GoodsService{
      */
     @Override
     public void updateById(Goods goods) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if (RoleEnum.USER.name().equals(currentUser.getRole())) {
+            goods.setStatus(StatusEnum.NOT_AUDIT.value);
+        }
         goodsMapper.updateById(goods);
     }
 
@@ -79,6 +87,7 @@ public class GoodsServiceImpl implements GoodsService{
 
         //查当前用户信息
         Account currentUser = TokenUtils.getCurrentUser();
+        goods.setUserName(userMapper.selectById(goods.getUserId()).getName());
         //查找对应点赞信息
         Likes likes = likesMapper.selectByUserIdAndFid(currentUser.getId(), id);
         goods.setUserLikes(likes != null);
@@ -106,6 +115,10 @@ public class GoodsServiceImpl implements GoodsService{
      */
     @Override
     public PageInfo<Goods> selectPage(Goods goods, Integer pageNum, Integer pageSize) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if (RoleEnum.USER.name().equals(currentUser.getRole())) {
+            goods.setUserId(currentUser.getId());
+        }
         PageHelper.startPage(pageNum, pageSize);
         List<Goods> list = goodsMapper.selectAll(goods);
         return PageInfo.of(list);
