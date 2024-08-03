@@ -68,8 +68,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Collect" />
-                  <option name="tableName" value="collect" />
+                  <option name="className" value="Comment" />
+                  <option name="tableName" value="comment" />
                 </TableUIInfo>
               </list>
             </option>
