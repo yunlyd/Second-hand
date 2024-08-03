@@ -1,5 +1,7 @@
 package com.yunyd.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import com.yunyd.common.enums.StatusEnum;
 import com.yunyd.entity.Account;
 import com.yunyd.entity.Collect;
 import com.yunyd.entity.Goods;
@@ -35,6 +37,10 @@ public class GoodsServiceImpl implements GoodsService{
      */
     @Override
     public void add(Goods goods) {
+        goods.setDate(DateUtil.now());
+        goods.setUserId(TokenUtils.getCurrentUser().getId());
+        goods.setStatus(StatusEnum.NOT_AUDIT.value);
+        goods.setReadCount(0);
         goodsMapper.insert(goods);
     }
 
