@@ -2,6 +2,7 @@ package com.yunyd.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yunyd.common.enums.RoleEnum;
 import com.yunyd.entity.Account;
 import com.yunyd.entity.Address;
 import com.yunyd.mapper.AddressMapper;
@@ -79,6 +80,10 @@ public class AddressServiceImpl implements AddressService{
      */
     @Override
     public PageInfo<Address> selectPage(Address address, Integer pageNum, Integer pageSize) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if (RoleEnum.USER.name().equals(currentUser.getRole())) {
+            address.setUserId(currentUser.getId());
+        }
         PageHelper.startPage(pageNum, pageSize);
         List<Address> list = addressMapper.selectAll(address);
         return PageInfo.of(list);
