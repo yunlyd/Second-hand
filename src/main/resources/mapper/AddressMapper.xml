@@ -23,10 +23,7 @@
         from address
         left join user on address.user_id = user.id
         <where>
-            <if test="id != null"> and address.id = #{id}</if>
             <if test="name != null"> and address.name like concat('%', #{name}, '%')</if>
-            <if test="address != null"> and address.address like concat('%', #{address}, '%')</if>
-            <if test="phone != null"> and address.phone like concat('%', #{phone}, '%')</if>
             <if test="userId != null"> and address.user_id = #{userId}</if>
         </where>
         order by address.id desc
